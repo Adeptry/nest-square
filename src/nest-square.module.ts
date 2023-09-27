@@ -1,5 +1,5 @@
 import { DynamicModule, Global, Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { NestSquareAsyncOptions } from "./nest-square-async-options.js";
 import {
   NEST_SQUARE_CONFIG_INJECTION_KEY,
@@ -33,7 +33,15 @@ export class NestSquareModule {
     return {
       module: NestSquareModule,
       imports: [ConfigModule.forFeature(NestSquareConfig)],
-      providers: [NestSquareService],
+      providers: [
+        NestSquareService,
+        {
+          provide: NEST_SQUARE_CONFIG_INJECTION_KEY,
+          useFactory: (config: ConfigService) =>
+            config.get<NestSquareConfigType>("square"),
+          inject: [ConfigService],
+        },
+      ],
       exports: [NestSquareService],
     };
   }
