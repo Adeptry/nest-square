@@ -34,12 +34,28 @@ import { NestSquareModule } from "nest-square";
 @Module({
   imports: [
     NestSquareModule.forRoot({
-      // or `forRootAsync`
       clientEnvironment: "",
       oauthClientId: "",
       oauthClientSecret: "",
     }),
   ],
+})
+export class AppModule {}
+```
+
+Instead of committing these strings, I recommend placing them in your `.env` (and adding it to `.gitignore`):
+
+```bash
+SQUARE_CLIENT_ENVIRONMENT=
+SQUARE_OAUTH_CLIENT_ID=
+SQUARE_OAUTH_CLIENT_SECRET=
+```
+
+If you do, you may make use of a the validating configuration convinience:
+
+```typescript
+@Module({
+  imports: [NestSquareModule.fromEnv()],
 })
 export class AppModule {}
 ```
@@ -73,14 +89,6 @@ export class AppService {
 ```
 
 If you do not want to use the retry higher-order-function, you may get a client directly, with or without an access token.
-
-### Configuration
-
-The `nest-square` configuration system uses NestJS's `registerAs` method from its `@nestjs/config` package to register a custom configuration object. This object provides a type-safe interface for accessing environment variables related to Square API.
-
-Class-based validation is used to ensure that required environment variables are both present and in the correct format.
-
-If the validation fails, an error is thrown.
 
 ### Retry
 

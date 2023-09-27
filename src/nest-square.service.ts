@@ -19,14 +19,17 @@ import {
 import { Readable } from "stream";
 import { NestSquareCatalogObjectTypeEnum } from "./nest-square-catalog-object-type.enum.js";
 import { NestSquareFile } from "./nest-square-file.js";
-import type { NestSquareConfigType } from "./nest-square.config.js";
+import {
+  NEST_SQUARE_CONFIG_INJECTION_KEY,
+  type NestSquareConfigType,
+} from "./nest-square.config.js";
 
 @Injectable()
 export class NestSquareService {
   private readonly logger = new Logger(NestSquareService.name);
 
   constructor(
-    @Inject("NEST_SQUARE_CONFIG")
+    @Inject(NEST_SQUARE_CONFIG_INJECTION_KEY)
     private config: NestSquareConfigType
   ) {
     this.logger.verbose(this.constructor.name);

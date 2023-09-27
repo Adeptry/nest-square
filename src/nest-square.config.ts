@@ -1,6 +1,8 @@
-import { registerAs } from '@nestjs/config';
-import { plainToClass } from 'class-transformer';
-import { IsString, validateSync } from 'class-validator';
+import { registerAs } from "@nestjs/config";
+import { plainToClass } from "class-transformer";
+import { IsString, validateSync } from "class-validator";
+
+export const NEST_SQUARE_CONFIG_INJECTION_KEY = "NEST_SQUARE_CONFIG";
 
 export type NestSquareConfigType = {
   clientEnvironment: string;
@@ -17,13 +19,10 @@ class SquareConfigValidator {
 
   @IsString()
   SQUARE_CLIENT_ENVIRONMENT!: string;
-
-  @IsString()
-  SQUARE_BASE_URL!: string;
 }
 
 export const NestSquareConfig = registerAs<NestSquareConfigType>(
-  'square',
+  "square",
   () => {
     const errors = validateSync(
       plainToClass(SquareConfigValidator, process.env, {
@@ -31,7 +30,7 @@ export const NestSquareConfig = registerAs<NestSquareConfigType>(
       }),
       {
         skipMissingProperties: false,
-      },
+      }
     );
 
     if (errors.length > 0) {
@@ -45,8 +44,6 @@ export const NestSquareConfig = registerAs<NestSquareConfigType>(
       oauthClientId: process.env.SQUARE_OAUTH_CLIENT_ID!,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       oauthClientSecret: process.env.SQUARE_OAUTH_CLIENT_SECRET!,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      baseUrl: process.env.SQUARE_BASE_URL!,
     };
-  },
+  }
 );
