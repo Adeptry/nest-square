@@ -16,12 +16,14 @@
   ],
   "author": "Paul Jones",
   "license": "MIT",
-  "dependencies": {
+  "peerDependencies": {
     "@nestjs/common": "^10.2.6",
     "@nestjs/config": "^3.1.1",
+    "square": "^31.0.0"
+  },
+  "dependencies": {
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
-    "p-retry": "^6.1.0",
-    "square": "^31.0.0"
+    "p-retry": "^6.1.0"
   }
 }

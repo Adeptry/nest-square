@@ -19,8 +19,10 @@ utilities you can choose to use if they suit your needs.
 To install the `nest-square` package, run the following command:
 
 ```bash
-npm install nest-square
+npm install nest-square @nestjs/common @nestjs/config square
 ```
+
+Nest.js and Square are peer dependencies.
 
 ## Quick Start
 
@@ -71,6 +73,24 @@ export class AppService {
 ```
 
 If you do not want to use the retry higher-order-function, you may get a client directly, with or without an access token.
+
+### Configuration
+
+The `nest-square` configuration system uses NestJS's `registerAs` method from its `@nestjs/config` package to register a custom configuration object. This object provides a type-safe interface for accessing environment variables related to Square API.
+
+Class-based validation is used to ensure that required environment variables are both present and in the correct format.
+
+If the validation fails, an error is thrown.
+
+### Retry
+
+The `retryOrThrow` method provides a built-in retry mechanism for dealing with transient issues in your API calls. It retries the provided client function multiple times before eventually throwing an error if all attempts are unsuccessful. This packages uses the default configuration of `p-retry`, and only retries HTTP >500 and 429, denoting an internal Square error or too many requests respectively.
+
+If you find that in the course of development you trigger a 429, you are likely doing something wrong.
+
+### Logging
+
+`nest-square` uses Nest.js's default logger set with class-name context, and verbosely logs every invocation.
 
 ### Webhooks
 
