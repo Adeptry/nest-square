@@ -1,6 +1,6 @@
 {
   "name": "nest-square",
-  "version": "0.13.0",
+  "version": "1.0.0",
   "type": "module",
   "description": "NestJS module for Square Node.js SDK",
   "main": "dist/index.js",
