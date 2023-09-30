@@ -114,35 +114,36 @@ export class SquareWebhookController {
   private readonly logger = new Logger(SquareWebhookController.name);
 
   constructor(
-    @Inject(YourConfig.KEY)
-    private readonly config: ConfigType<typeof YourConfig>,
+    @Inject(SquareConfig.KEY)
+    private readonly squareConfig: ConfigType<typeof SquareConfig>,
     private readonly eventEmitter: EventEmitter2
   ) {}
 
   @ApiExcludeEndpoint()
   @Post()
   post(
-    @Headers("x-square-signature") signature: string,
-    // Enable raw bodies!
-    @Body() body: any,
-    @Req() request: Request
+    @Req() request: RawBodyRequest<Request>,
+    @Headers("x-square-hmacsha256-signature") signature?: string
   ) {
     this.logger.verbose(this.post.name);
-    // WebhooksHelper from Square
-    if (
-      !WebhooksHelper.isValidWebhookEventSignature(
-        body,
+    const { body, hostname, originalUrl, rawBody } = request;
+    const { squareWebhookSignatureKey } = this.squareConfig;
+
+    if (signature && rawBody) {
+      const isValid = WebhooksHelper.isValidWebhookEventSignature(
+        rawBody.toString(),
         signature,
-        this.config.webhookSignatureKey,
-        request.url
-      )
-    ) {
-      return;
+        squareWebhookSignatureKey,
+        `https://${hostname}${originalUrl}`
+      );
+
+      if (isValid) {
+        this.eventEmitter.emit(`square.${body.type}`, body);
+        return;
+      }
     }
 
-    this.logger.log(body.type);
-    // I'm prefixing the event with `square``, consult Square's documentation for the list.
-    this.eventEmitter.emit(`square.${body.type}`, body);
+    this.logger.error("Invalid Square webhook signature");
   }
 }
 ```
@@ -153,7 +154,7 @@ Please refer to the inline JSDoc comments for more detailed information on each 
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on the process for submitting pull requests.
 
 ## License
 

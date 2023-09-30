@@ -1,29 +1,30 @@
 {
-  "name": "nest-square",
-  "version": "1.1.1",
-  "type": "module",
+  "author": "Paul Jones",
+  "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "p-retry": "^6.1.0"
+  },
   "description": "NestJS module for Square Node.js SDK",
-  "main": "dist/index.js",
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsc"
-  },
+  "homepage": "https://github.com/Adeptry/nest-square",
   "keywords": [
     "Nest",
     "Square"
   ],
-  "author": "Paul Jones",
   "license": "MIT",
+  "main": "dist/index.js",
+  "name": "nest-square",
   "peerDependencies": {
     "@nestjs/common": "^10.2.6",
     "@nestjs/config": "^3.1.1",
     "square": "^31.0.0"
   },
-  "dependencies": {
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.0",
-    "p-retry": "^6.1.0"
-  }
+  "scripts": {
+    "build": "tsc"
+  },
+  "type": "module",
+  "version": "1.1.1"
 }
