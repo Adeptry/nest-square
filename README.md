@@ -100,6 +100,53 @@ If you find that in the course of development you trigger a 429, you are likely 
 
 `nest-square` uses Nest.js's default logger set with class-name context, and verbosely logs every invocation.
 
+### BigInt
+
+To represent money amounts, Square makes use of BigInt. To facilitate serialization, consider including the following Nest pipe:
+
+```typescript
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from "@nestjs/common";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+
+@Injectable()
+export class BigIntInterceptor implements NestInterceptor {
+  intercept(_context: ExecutionContext, next: CallHandler): Observable<any> {
+    return next.handle().pipe(map((data) => this.transformBigInt(data)));
+  }
+
+  private transformBigInt(object: any): any {
+    if (object === null) {
+      return null;
+    }
+    switch (typeof object) {
+      case "bigint":
+        return object.toString();
+      case "object":
+        for (const key in object) {
+          object[key] = this.transformBigInt(object[key]);
+        }
+        return object;
+      default:
+        return object;
+    }
+  }
+}
+
+// In main.ts
+
+app.useGlobalInterceptors(new BigIntInterceptor());
+```
+
+This will make so that if an object you provide in response to a request has a BigInt, like say if you return the result of a Square API directly, it will be converted to a String. Modify to suit your applications' needs.
+
+Be sure to check the [documentation](https://developer.squareup.com/docs/sdks/nodejs/setup-project#nodejs-express-and-bigint) on this topic.
+
 ### Webhooks
 
 To handle Square Webhooks, consider the `SquareWebhookController` class below listens to POST requests on the `square/webhook` route.
