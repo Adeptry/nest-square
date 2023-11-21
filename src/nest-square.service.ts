@@ -108,7 +108,7 @@ export class NestSquareService {
           merchantId,
           revokeOnlyAccessToken,
         },
-        this.config.oauthClientSecret
+        `Authorization: Client ${this.config.oauthClientSecret}`
       )
     );
   }
