@@ -91,6 +91,29 @@ export class NestSquareService {
   }
 
   /**
+   * Retries revoking an OAuth token or throws an error if unsuccessful.
+   */
+  retryRevokeTokenOrThrow(params: {
+    accessToken?: string | null;
+    merchantId?: string | null;
+    revokeOnlyAccessToken?: boolean | null;
+  }): Promise<ApiResponse<ObtainTokenResponse>> {
+    const { accessToken, merchantId, revokeOnlyAccessToken } = params;
+    this.logger.verbose(this.retryObtainTokenOrThrow.name);
+    return this.pRetryOrThrow(() =>
+      this.client().oAuthApi.revokeToken(
+        {
+          clientId: this.config.oauthClientId,
+          accessToken,
+          merchantId,
+          revokeOnlyAccessToken,
+        },
+        this.config.oauthClientSecret
+      )
+    );
+  }
+
+  /**
    * Retries refreshing an OAuth token or throws an error if unsuccessful.
    *
    * @param {object} params - The parameters needed to refresh a token.
