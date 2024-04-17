@@ -18,7 +18,7 @@
   "main": "dist/index.js",
   "name": "nest-square",
   "peerDependencies": {
-    "@nestjs/common": "^10.2.7",
+    "@nestjs/common": "^10.3.1",
     "@nestjs/config": "^3.1.1",
     "square": "^34.0.1"
   },
@@ -26,5 +26,5 @@
     "build": "tsc"
   },
   "type": "module",
-  "version": "34.0.1"
+  "version": "34.0.2"
 }
