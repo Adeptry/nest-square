@@ -18,13 +18,13 @@
   "main": "dist/index.js",
   "name": "nest-square",
   "peerDependencies": {
-    "@nestjs/common": "^10.3.1",
-    "@nestjs/config": "^3.1.1",
-    "square": "^34.0.1"
+    "@nestjs/common": "^10.3.7",
+    "@nestjs/config": "^3.2.2",
+    "square": "^36.0.0"
   },
   "scripts": {
     "build": "tsc"
   },
   "type": "module",
-  "version": "34.0.2"
+  "version": "36.0.0"
 }
